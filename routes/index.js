@@ -10,8 +10,47 @@ const OQS_XML_PREFIX = 'OQSsiquc01res_face_';
 
 // 設定ファイルの読み込み
 // config.jsonの絶対パスを計算
+const defaultConfig = {
+  filePath: "./output",
+  MedicalInstitutionCode: "0000"
+};
 const configPath = path.resolve(__dirname, '../config.json');
-let config = require(configPath);
+let config;
+
+const loadConfig = async () => {
+  let readconfig;
+  try {
+    // 設定ファイルが存在するか確認
+    await fs.access(configPath);
+    console.log('設定ファイルが見つかりました。読み込んでいます...');
+    
+    // ファイル内容を読み込む
+    const data = await fs.readFile(configPath, 'utf8');
+    readconfig = JSON.parse(data);
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      console.log('設定ファイルが存在しません。初期値で作成します。');
+
+      // 初期値でファイルを作成
+      await fs.writeFile(configPath, JSON.stringify(defaultConfig, null, 2), 'utf8');
+      readconfig = defaultConfig;
+    } else {
+      // それ以外のエラーはログを出力して再スロー
+      console.error('設定ファイルの読み込み中にエラーが発生しました:', err);
+      throw err;
+    }
+  }
+  return readconfig;
+};
+(async () => {
+  try {
+    config = await loadConfig();
+    // console.log('現在の設定:', config);
+  } catch (err) {
+    console.error('エラーが発生しました:', err);
+  }
+})();
+
 
 // 元号を西暦に変換する関数
 const convertJapaneseDateToWestern = (japaneseDate) => {
@@ -53,7 +92,7 @@ const getFormattedDate = () => {
   return `${year}${month}${day}${hours}${minutes}${seconds}`;
 };
 
-// parseTextData関数の修正
+// TextDataからkey valueを分離
 const parseTextData = (text) => {
   const lines = text.split('\n'); // テキストを行ごとに分割
   const data = {}; // 解析結果を格納するオブジェクト
@@ -106,8 +145,14 @@ const parseTextData = (text) => {
   return data; // 解析結果を返す
 };
 
-  
+//オブジェクトが適性か判断する関数  
+function hasRequiredKeys(obj) {
+  // 必要なキーのリスト
+  const requiredKeys = ['氏名', 'フリガナ', '生年月日', '記号', '番号', '保険者番号'];
 
+  // 全てのキーがオブジェクトに含まれているか判定
+  return requiredKeys.every(key => obj.hasOwnProperty(key));
+}
 
 // XMLを生成する関数
 const generateXml = (data) => {
@@ -213,25 +258,31 @@ router.post('/convert-xml', async (req, res) => {
   if (!sanitizedTextData || typeof sanitizedTextData !== 'string') {
     return res.status(400).json({ error: 'Invalid input: textData must be a non-empty string.' });
   }
-
+  
+  let xmlOutput;
   const parsedData = parseTextData(sanitizedTextData);
-  let xmlOutput = generateXml(parsedData);
-  console.log(parsedData);
 
-  const saveresult = await saveXmlToFile(xmlOutput);
+  if(hasRequiredKeys(parsedData)){
+    console.log('正しい保険情報を受け取りました。xml変換して出力します');
+    xmlOutput = generateXml(parsedData);
+    console.log(parsedData);
 
-  xmlOutput = saveresult + '\n\n' + xmlOutput;
+    const saveresult = await saveXmlToFile(xmlOutput);
+
+    xmlOutput = saveresult + '\n\n' + xmlOutput;
+  } else{
+    console.log('保険情報が正しくありません');
+    xmlOutput = '入力されたデータのフォーマットが正しくありませんでしたので、処理を中止しました';
+  }
   res.header('Content-Type', 'application/xml');
   res.send(xmlOutput);
-
-  
 });
 
 // 設定ページのGETルート
 router.get('/settings', async (req, res) => {
   try {
     // delete require.cache[require.resolve(configPath)];
-    config = require(configPath); // 設定ファイルを読み込み
+    config = await loadConfig(); // 設定ファイルを読み込み
 
     res.render('settings', { config });
   } catch (err) {
@@ -248,7 +299,7 @@ router.post('/settings', async (req, res) => {
     await fs.writeFile(configPath, JSON.stringify(updatedConfig, null, 2), 'utf8'); // 設定を保存
     // requireキャッシュをクリア
     delete require.cache[require.resolve(configPath)];
-    config = require(configPath);
+    config = await loadConfig();
     
     res.redirect('/settings'); // 設定ページを再表示
     console.log('設定を保存しました', updatedConfig);
