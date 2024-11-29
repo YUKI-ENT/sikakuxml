@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<XmlMsg>
+  <MessageHeader>
+    <ProcessExecutionTime>20241127214636</ProcessExecutionTime>
+    <CharacterCodeIdentifier>1</CharacterCodeIdentifier>
+    <SegmentOfResult>1</SegmentOfResult>
+    <QualificationConfirmationDate>20241126</QualificationConfirmationDate>
+    <ReferenceClassification>1</ReferenceClassification>
+    <ArbitraryFileIdentifier>B4u_QfxBNjMCL4w=</ArbitraryFileIdentifier>
+    <MedicalInstitutionCode>2714206386</MedicalInstitutionCode>
+  </MessageHeader>
+  <MessageBody>
+    <ResultList>
+      <ResultOfQualificationConfirmation>
+        <Address/>
+        <InsuredName>åãèÈÅ@òaâõ</InsuredName>
+        <NameKana>’≥∑ ∂ΩﬁÀª</NameKana>
+        <Birthdate>19711015</Birthdate>
+        <Sex1>1</Sex1>
+        <InsuredCardSymbol>à„çëÇRÇSÇO</InsuredCardSymbol>
+        <InsuredIdentificationNumber>ÇOÇQÇWÇQÅ]ÇOÇOÇP</InsuredIdentificationNumber>
+        <InsuredBranchNumber>01</InsuredBranchNumber>
+        <QualificationDate>20101201</QualificationDate>
+        <InsuredCardValidDate>20101201</InsuredCardValidDate>
+        <InsuredCardExpirationDate>20251031</InsuredCardExpirationDate>
+        <InsurerNumber>273128</InsurerNumber>
+        <InsurerName>ëÂç„ï{à„étçëñØåíçNï€åØëgçá</InsurerName>
+        <LimitApplicationCertificateRelatedInfo>
+          <LimitApplicationCertificateClassification>01</LimitApplicationCertificateClassification>
+          <LimitApplicationCertificateClassificationFlag>A01</LimitApplicationCertificateClassificationFlag>
+          <LimitApplicationCertificateValidStartDate>20240801</LimitApplicationCertificateValidStartDate>
+          <LimitApplicationCertificateValidEndDate>20250731</LimitApplicationCertificateValidEndDate>
+        </LimitApplicationCertificateRelatedInfo>
+      </ResultOfQualificationConfirmation>
+    </ResultList>
+    <ProcessingResultStatus>1</ProcessingResultStatus>
+    <QualificationValidity>1</QualificationValidity>
+  </MessageBody>
+</XmlMsg>

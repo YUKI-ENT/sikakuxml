@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="Shift_JIS" standalone="yes"?>
+<XmlMsg>
+  <MessageHeader>
+    <ProcessExecutionTime>20241129090845</ProcessExecutionTime>
+    <CharacterCodeIdentifier>1</CharacterCodeIdentifier>
+    <SegmentOfResult>1</SegmentOfResult>
+    <QualificationConfirmationDate>20241129</QualificationConfirmationDate>
+    <ReferenceClassification>1</ReferenceClassification>
+    <ArbitraryFileIdentifier>B4u_QfxBNjMCL4w=</ArbitraryFileIdentifier>
+    <MedicalInstitutionCode>2714206386</MedicalInstitutionCode>
+  </MessageHeader>
+  <MessageBody>
+    <ResultList>
+      <ResultOfQualificationConfirmation>
+        <Address/>
+        <Sex1>2</Sex1>
+        <PersonalFamilyClassification>2</PersonalFamilyClassification>
+        <LimitApplicationCertificateRelatedInfo>
+          <LimitApplicationCertificateClassification>01</LimitApplicationCertificateClassification>
+          <LimitApplicationCertificateClassificationFlag>A01</LimitApplicationCertificateClassificationFlag>
+        </LimitApplicationCertificateRelatedInfo>
+      </ResultOfQualificationConfirmation>
+    </ResultList>
+    <ProcessingResultStatus>1</ProcessingResultStatus>
+    <QualificationValidity>1</QualificationValidity>
+  </MessageBody>
+</XmlMsg>

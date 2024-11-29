@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XML変換ツール</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+  <!-- ナビゲーションバー -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">XML Generator</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <!-- 設定ページへのリンク -->
+          <li class="nav-item">
+            <a class="nav-link" href="/settings">設定</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container mt-5">
+    <h1 class="mb-4 text-center">XML変換ツール</h1>
+
+    <!-- 入力用テキストボックス -->
+    <div class="mb-3">
+      <label for="inputText" class="form-label">テキストデータを入力してください:</label>
+      <textarea id="inputText" class="form-control" rows="10" placeholder="ここに貼り付け"></textarea>
+    </div>
+
+    <!-- ボタン -->
+    <div class="d-flex justify-content-center mb-3">
+      <button id="convertBtn" class="btn btn-primary me-2">XMLに変換する</button>
+      <button onclick="clearTextBoxes()" class="btn btn-secondary">クリア</button>
+    </div>
+    <!-- 出力用テキストボックス -->
+    <div class="mb-3">
+      <label for="outputXml" class="form-label">生成されたXML:</label>
+      <textarea id="outputXml" class="form-control" rows="10" readonly placeholder="ここにXMLが表示されます"></textarea>
+    </div>
+  </div>
+
+  <script>
+    // ボタンのクリックイベント
+    document.getElementById('convertBtn').addEventListener('click', async () => {
+      const textData = document.getElementById('inputText').value.trim();
+      if (!textData) {
+        alert('テキストデータを入力してください');
+        return;
+      }
+
+      try {
+        // サーバーにデータを送信してXMLを生成
+        const response = await fetch('/convert-xml', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ textData }),
+        });
+
+        if (!response.ok) {
+          throw new Error('サーバーエラーが発生しました');
+        }
+
+        const result = await response.text();
+        document.getElementById('outputXml').value = result;
+        document.getElementById('inputText').value = '';
+      } catch (error) {
+        console.error(error);
+        alert('エラーが発生しました: ' + error.message);
+      }
+    });
+
+    // 「クリア」ボタンのクリックイベント
+    function clearTextBoxes() {
+      document.getElementById('inputText').value = '';
+      document.getElementById('outputXml').value = '';
+    }
+  </script>
+</body>
+</html>
