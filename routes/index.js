@@ -11,7 +11,7 @@ const OQS_XML_PREFIX = 'OQSsiquc01res_face_';
 // 設定ファイルの読み込み
 // config.jsonの絶対パスを計算
 const defaultConfig = {
-  filePath: "./output",
+  filePath: "/mnt",
   MedicalInstitutionCode: "0000"
 };
 const configPath = path.resolve(__dirname, '../config.json');

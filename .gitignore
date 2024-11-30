@@ -1,1 +1,4 @@
 config.json
+Dockerfile
+.dockerignore
+sikakuxml.tar
